@@ -22,13 +22,14 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  userType UserType?
+  userType            UserType?
+  onboardingCompleted Boolean   @default(false)
 
-  Company   Company?
-  JobSeeker JobSeeker?
+  Company       Company?
+  JobSeeker     JobSeeker?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Company {

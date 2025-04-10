@@ -9,8 +9,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
+} from "../../ui/form";
+import { Input } from "../../ui/input";
 import {
   Select,
   SelectContent,
@@ -19,10 +19,13 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "../../ui/select";
 import { countryList } from "@/app/utils/countriesList";
-import { Textarea } from "../ui/textarea";
-import { UploadDropzone } from "../general/UploadThingReexported";
+import { Textarea } from "../../ui/textarea";
+import { UploadDropzone } from "../../general/UploadThingReexported";
+import { createCompany } from "@/app/actions";
+import { useState } from "react";
+import { Button } from "../../ui/button";
 
 export function CompanyForm() {
   const form = useForm<z.infer<typeof companySchema>>({
@@ -36,11 +39,29 @@ export function CompanyForm() {
       xAccount: "",
     },
   });
+
+  const [pending, setPending] = useState(false);
+
+  async function onSubmit(data: z.infer<typeof companySchema>) {
+    try {
+      setPending(true)
+      await createCompany(data);
+
+    } catch (error) {
+      if(error instanceof Error && error.message !== 'NEXT_REDIRECT'){
+        console.log("Something went wrong")
+      }
+    }
+    finally{
+      setPending(false);
+    }
+  }
+
   return (
     // {...form} passes all useForm() methods (like register, handleSubmit, control, etc.) into the component.
 
     <Form {...form}>
-      <form className="space-y-6">
+      <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
@@ -161,6 +182,10 @@ export function CompanyForm() {
             </FormItem>
           )}
         />
+
+        <Button type="submit" className="w-full">
+          {pending ? 'Submitting...' : 'Continue'}
+        </Button>
       </form>
     </Form>
   );
