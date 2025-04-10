@@ -2,7 +2,6 @@ import { OnboardingForm } from "@/components/forms/onboarding/OnboardingForm";
 import { requireUser } from "../utils/requireUser";
 
 
-
 export default async function onboardingPage() {
   const session = await requireUser();
   return (

@@ -172,8 +172,14 @@ export function CompanyForm() {
               <UploadDropzone
                 endpoint="imageUploader"
                 onClientUploadComplete={(res) => {
-                  field.onChange(res[0].url);
+                  if (res && res.length > 0 && res[0]?.url) {
+                    field.onChange(res[0].url);
+                  } else {
+                    console.error("Upload failed or returned no result:", res);
+                    field.onChange(""); // fallback to empty string
+                  }
                 }}
+                
                 onUploadError={() => {
                   console.log("Something went wrong");
                 }}
@@ -183,7 +189,7 @@ export function CompanyForm() {
           )}
         />
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" disabled={pending}>
           {pending ? 'Submitting...' : 'Continue'}
         </Button>
       </form>
