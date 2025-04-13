@@ -5,9 +5,30 @@ import { requireUser } from "./utils/requireUser";
 import { companySchema, jobSeekerSchema } from "./utils/zodSchema";
 import { prisma } from "./utils/db";
 import { redirect } from "next/navigation";
+import arcjet, { detectBot, shield } from "./utils/arcjet";
+import { request } from "@arcjet/next";
+
+const aj = arcjet.withRule(
+    shield({
+        mode: 'LIVE'
+    })
+).withRule(
+    detectBot({
+        mode: 'LIVE',
+        allow: []
+    })
+)
 
 export async function createCompany(data: z.infer<typeof companySchema>) {
     const session = await requireUser();
+
+    const req = await request();
+
+    const decision = await aj.protect(req);   // denied or allowed
+
+    if(decision.isDenied()){
+        throw new Error("Forbidden")
+    }
 
     const validateData = companySchema.parse(data);
 
@@ -32,6 +53,14 @@ export async function createCompany(data: z.infer<typeof companySchema>) {
 export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>){
     const session = await requireUser();
 
+    const req = await request();
+
+    const decision = await aj.protect(req);   // denied or allow
+
+    if(decision.isDenied()){
+        throw new Error("Forbidden")
+    }
+
     const validateData = jobSeekerSchema.parse(data);
 
     await prisma.user.update({
@@ -51,3 +80,4 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>){
 
     return redirect("/");
 }
+
