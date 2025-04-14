@@ -110,7 +110,7 @@ export function JobSeekerForm() {
                       <UploadDropzone
                         endpoint="resumeUploader"
                         onClientUploadComplete={(res) => {
-                          field.onChange(res[0].url);
+                          field.onChange(res[0].ufsUrl);
                         }}
                         onUploadError={() => {
                           console.log("something went wrong");
