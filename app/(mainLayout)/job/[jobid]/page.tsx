@@ -16,6 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+
 const aj = arcjet.withRule(
   detectBot({
     mode: "LIVE",
@@ -96,6 +97,7 @@ async function getJob(jobId: string, userId?: string) {
 }
 
 type Params = Promise<{ jobId: string }>;
+
 export default async function JobIdPage({ params }: { params: Params }) {
   const { jobId } = await params;
 
@@ -198,7 +200,7 @@ export default async function JobIdPage({ params }: { params: Params }) {
               <h3 className="font-semibold">Apply now</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Please let {data.Company.name} know you found this job on
-                JobMarshal. This helps us grow!
+                JobQuest. This helps us grow!
               </p>
             </div>
 
