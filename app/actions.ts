@@ -241,10 +241,7 @@ export async function saveJobPost(jobId: string) {
     revalidatePath(`/job/${data.jobPostId}`);
   }
   
-  export async function editJobPost(
-    data: z.infer<typeof jobSchema>,
-    jobId: string
-  ) {
+  export async function editJobPost(data: z.infer<typeof jobSchema>, jobId: string) {
     const user = await requireUser();
   
     const req = await request();
