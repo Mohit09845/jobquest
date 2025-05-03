@@ -5,9 +5,21 @@ import { buttonVariants } from "../ui/button";
 import { Themetoggle } from "./Themetoggle";
 import { auth } from "@/app/utils/auth";
 import { UserDropdown } from "./UserDropdown";
+import { prisma } from "@/app/utils/db";
 
 export async function Navbar() {
   const session = await auth();
+
+  let isCompany = false;
+
+  if (session?.user?.email) {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { userType: true },
+    });
+
+    isCompany = user?.userType === "COMPANY";
+  }
 
   return (
     <nav className="flex items-center justify-between py-5">
@@ -21,9 +33,11 @@ export async function Navbar() {
       {/* Desktop Navigation */}
       <div className="hidden md:flex items-center gap-5">
         <Themetoggle />
-        <Link className={buttonVariants({ size: "lg" })} href="/post-job">
-          Post Job
-        </Link>
+        {isCompany && (
+          <Link className={buttonVariants({ size: "lg" })} href="/post-job">
+            Post Job
+          </Link>
+        )}
         {session?.user ? (
           <UserDropdown
             email={session.user.email as string}

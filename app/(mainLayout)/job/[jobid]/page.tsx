@@ -16,7 +16,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-
 const aj = arcjet.withRule(
   detectBot({
     mode: "LIVE",
@@ -67,12 +66,14 @@ async function getJob(jobId: string, userId?: string) {
             logo: true,
             location: true,
             about: true,
+            website: true,
           },
         },
       },
     }),
 
-    userId ? prisma.savedJobPost.findUnique({
+    userId
+      ? prisma.savedJobPost.findUnique({
           where: {
             userId_jobPostId: {
               userId,
@@ -204,7 +205,20 @@ export default async function JobIdPage({ params }: { params: Params }) {
               </p>
             </div>
 
-            <Button className="w-full">Apply now</Button>
+            {data.Company.website ? (
+              <Link
+                href={data.Company.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block mt-4"
+              >
+                <Button className="w-full">Apply now</Button>
+              </Link>
+            ) : (
+              <Button className="w-full mt-4" disabled>
+                No Website Available
+              </Button>
+            )}
           </div>
         </Card>
 

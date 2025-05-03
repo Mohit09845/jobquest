@@ -78,6 +78,7 @@ export function CreateJobForm({
   async function onSubmit(values: z.infer<typeof jobSchema>) {
     try {
       setPending(true);
+      console.log("Submitting form with values:", values);
       await createJob(values);
     } catch (error) {
       if (error instanceof Error && error.message !== "NEXT_REDIRECT") {

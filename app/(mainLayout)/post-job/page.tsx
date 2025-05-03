@@ -1,7 +1,7 @@
 import ArcjetLogo from "@/public/arcjet.jpg";
 import InngestLogo from "@/public/inngest-locale.png";
-import OlaLogo from "@/public/OlaLogo.png"
-import MetaLogo from "@/public/MetaLogo.png"
+import OlaLogo from "@/public/OlaLogo.png";
+import MetaLogo from "@/public/MetaLogo.png";
 import {
   Card,
   CardContent,
@@ -125,7 +125,7 @@ export default async function PostJobPage() {
                   className="border-l-2 border-primary pl-4"
                 >
                   <p className="text-sm text-muted-foreground italic">
-                    "{testimonial.quote}"
+                    &quot;{testimonial.quote}&quot;
                   </p>
                   <footer className="mt-2 text-sm font-medium">
                     - {testimonial.author}, {testimonial.company}

@@ -17,7 +17,7 @@ export const handleJobExpiration = inngest.createFunction(
   { id: "job-expiration", cancelOn: [
     {
       event: 'job/cancel.expiration',
-      if: 'event.data.jobId === async.data.jobId'
+      if: 'event.data.jobId == async.data.jobId'
     }
   ] },
   { event: "job/created" },
@@ -46,7 +46,7 @@ export const sendPeriodicJobListings = inngest.createFunction(
   { id: "send-job-listings" },
   { event: "jobseeker/created" },
   async ({ event, step }) => {
-    const { userId, email } = event.data;
+    const { userId } = event.data;
 
     const totalDays = 30;
     const intervalDays = 2;
@@ -89,7 +89,7 @@ export const sendPeriodicJobListings = inngest.createFunction(
           await resend.emails.send({
             from: "JobQuest <onboarding@resend.dev>",
             to: ["mmhj53453@gmail.com"],
-            subject: "Latest Job Opportniues for you",
+            subject: "Latest Job Opportunities for you",
             html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                   <h2>Latest Job Opportunities</h2>
                   ${jobListingsHtml}
